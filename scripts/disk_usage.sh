@@ -1,6 +1,6 @@
 #!/bin/bash
 
-read -r TOTAL USED AVAILABLE USAGE <<< "$(df -h / | awk '$6=="/" {print $2, $3, $4, $5}')"
+read -r TOTAL USED AVAILABLE USAGE <<<"$(df -h / | awk '$6=="/" {print $2, $3, $4, $5}')"
 
 echo "=== Disk Usage ==="
 
