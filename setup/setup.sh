@@ -17,6 +17,31 @@ detect_os() {
 	echo "OS: $OS_NAME"
 }
 
+detect_package_manager() {
+	if command -v apt-get >/dev/null 2>&1; then
+		PACKAGE_MANAGER="apt-get"
+	else
+		echo "Error: Unsupported package manager."
+		exit 1
+	fi
+
+	echo "Package manager: $PACKAGE_MANAGER"
+}
+
+install_package() {
+	local package="$1"
+
+	echo "Installing $package..."
+
+	if sudo "$PACKAGE_MANAGER" install -y "$package"; then
+		echo "✓ $package installed successfully"
+		return 0
+	else
+		echo "✗ Failed to install $package"
+		return 1
+	fi
+}
+
 check_command() {
 	if command -v "$1" >/dev/null 2>&1; then
 		echo "✓ $1 is installed"
@@ -27,6 +52,7 @@ check_command() {
 }
 
 detect_os
+detect_package_manager
 
 echo ""
 
@@ -56,7 +82,7 @@ else
 		echo ""
 		echo "Updating package lists..."
 
-		if sudo apt update; then
+		if sudo "$PACKAGE_MANAGER" update; then
 			echo "Package lists updated successfully."
 		else
 			echo "Failed to update package lists."
@@ -67,14 +93,9 @@ else
 		echo "Installing missing tools..."
 
 		for tool in "${MISSING_TOOLS[@]}"; do
-			echo "Installing $tool..."
-
-			if sudo apt install -y "$tool"; then
-				echo "✓ $tool installed successfully"
-			else
-				echo "✗ Failed to install $tool"
+			if ! install_package "$tool"; then
+				FAILED_TOOLS+=("$tool")
 			fi
-
 		done
 
 		echo ""
@@ -84,10 +105,8 @@ else
 			if command -v "$tool" >/dev/null 2>&1; then
 				echo "✓ $tool is available"
 			else
-				FAILED_TOOLS+=("$tool")
 				echo "✗ $tool is still missing"
 			fi
-
 		done
 
 		if [[ ${#FAILED_TOOLS[@]} -eq 0 ]]; then
