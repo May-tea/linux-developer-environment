@@ -1,2 +1,4 @@
+#!/usr/bin/env bash
+
 export PROJECT_NAME="linux-developer-environment"
 export EDITOR="code"
