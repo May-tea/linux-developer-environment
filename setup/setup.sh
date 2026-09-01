@@ -28,6 +28,13 @@ detect_package_manager() {
 	echo "Package manager: $PACKAGE_MANAGER"
 }
 
+check_sudo() {
+	if ! sudo -v; then
+		echo "Error: sudo access is required to install missing tools."
+		exit 1
+	fi
+}
+
 install_package() {
 	local package="$1"
 
@@ -79,6 +86,8 @@ else
 	read -r -p "Install missing tools? [y/N]: " answer
 
 	if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+		check_sudo
+
 		echo ""
 		echo "Updating package lists..."
 
