@@ -1,0 +1,12 @@
+# File listing
+alias ll='ls -lah'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+
+# Git
+alias gs='git status'
+alias gl='git log --oneline --graph --decorate'
