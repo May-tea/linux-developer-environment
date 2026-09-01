@@ -12,3 +12,6 @@ alias ...='cd ../..'
 # Git
 alias gs='git status'
 alias gl='git log --oneline --graph --decorate'
+
+# Terminal
+alias c='clear'
