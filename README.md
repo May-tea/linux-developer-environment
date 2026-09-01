@@ -79,6 +79,7 @@ l     List files with indicators
 ...   Move two directories up
 gs    Git status
 gl    Git log
+c     Clear terminal
 ```
 
 ### Environment Configuration

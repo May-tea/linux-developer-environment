@@ -6,6 +6,17 @@ FAILED_TOOLS=()
 echo "=== Linux Developer Environment Setup ==="
 echo ""
 
+detect_os() {
+	if [[ ! -f /etc/os-release ]]; then
+		echo "Error: Cannot detect operating system."
+		exit 1
+	fi
+
+	OS_NAME=$(grep '^PRETTY_NAME=' /etc/os-release | cut -d '"' -f 2)
+
+	echo "OS: $OS_NAME"
+}
+
 check_command() {
 	if command -v "$1" >/dev/null 2>&1; then
 		echo "✓ $1 is installed"
@@ -14,6 +25,10 @@ check_command() {
 		echo "✗ $1 is not installed"
 	fi
 }
+
+detect_os
+
+echo ""
 
 REQUIRED_TOOLS=("git" "python3" "curl" "htop")
 
